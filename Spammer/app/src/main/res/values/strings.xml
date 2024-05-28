@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">SMSReceiver</string>
+    <string name="hint_textview">Last sms received</string>
+    <string name="tab1">Contact List</string>
+    <string name="tab2">Contact Selection</string>
+    <string name="tab3">Spammer</string>
+    <string name="count_view">Number of messages : </string>
+</resources>
