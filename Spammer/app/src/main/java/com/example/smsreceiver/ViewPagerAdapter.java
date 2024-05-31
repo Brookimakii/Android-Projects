@@ -13,6 +13,7 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
   @NonNull
   @Override
   public Fragment createFragment(int position) {
+    // Switch to control witch fragment is active
     switch (position) {
       case 1:
         return new PrebuiltMessagesFragment();

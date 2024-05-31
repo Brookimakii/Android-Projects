@@ -1,4 +1,5 @@
 package com.example.smsreceiver;
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -6,7 +7,9 @@ import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
+
 public class SmsReceiver extends BroadcastReceiver {
+  @SuppressLint("UnsafeProtectedBroadcastReceiver")
   @Override
   public void onReceive(Context context, Intent intent) {
     Bundle bundle = intent.getExtras();

@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+// View Containing all Information shared between Fragments
 public class SharedViewModel extends AndroidViewModel {
   private static final String PREFS_NAME = "MyAppPrefs";
   private static final String KEY_SPAM_MESSAGE = "spam_message";
@@ -25,8 +26,8 @@ public class SharedViewModel extends AndroidViewModel {
   private String autoMessage;
   private boolean autoReply;
   
-  private SharedPreferences sharedPreferences;
-  private ObjectMapper objectMapper;
+  private final SharedPreferences sharedPreferences;
+  private final ObjectMapper objectMapper;
   
   public SharedViewModel(@NonNull Application application) {
     super(application);
@@ -37,12 +38,6 @@ public class SharedViewModel extends AndroidViewModel {
   
   public String getSpamMessage() {
     return spamMessage;
-  }
-  
-  @Override
-  public String toString() {
-    return "SharedViewModel{" + "contacts=" + contacts + ", spamMessage='" + spamMessage + '\''
-           + ", autoMessage='" + autoMessage + '\'' + '}';
   }
   
   public void setSpamMessage(String spamMessage) {

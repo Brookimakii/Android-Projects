@@ -18,11 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+// Fragment That List ContactS.
 public class ContactsFragment extends Fragment {
   private SharedViewModel viewModel;
-  private RecyclerView recyclerView;
-  private ContactAdapter contactAdapter;
-  private List<Contact> contactList;
   
   
   public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,10 +36,10 @@ public class ContactsFragment extends Fragment {
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_contacts, container, false);
-    recyclerView = view.findViewById(R.id.recycler_view_contacts);
+    RecyclerView recyclerView = view.findViewById(R.id.recycler_view_contacts);
     recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-    contactList = viewModel.getContacts();
-    contactAdapter = new ContactAdapter(contactList, this);
+    List<Contact> contactList = viewModel.getContacts();
+    ContactAdapter contactAdapter = new ContactAdapter(contactList, this);
     recyclerView.setAdapter(contactAdapter);
     
     return view;
@@ -51,6 +49,8 @@ public class ContactsFragment extends Fragment {
     List<Contact> contacts = new ArrayList<>();
     Cursor cursor = getActivity().getContentResolver().query(
         ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+    
+    // Looping through all contacts
     while (cursor.moveToNext()) {
       String name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
       String phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
@@ -84,6 +84,8 @@ public class ContactsFragment extends Fragment {
       holder.nameTextView.setText(contact.getName());
       holder.phoneTextView.setText(contact.getPhoneNumber());
       holder.checkBox.setChecked(contact.isSelected());
+      
+      // Contact Checkbox that update the viewModel
       holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
         contact.setSelected(isChecked);
         if (isChecked) {
@@ -113,7 +115,6 @@ public class ContactsFragment extends Fragment {
     }
   }
   
-  
   public static class Contact {
     private final String name;
     private final String phoneNumber;
@@ -141,7 +142,5 @@ public class ContactsFragment extends Fragment {
     public boolean isSelected() {
       return isSelected;
     }
-    
-    // Getters and setters
   }
 }

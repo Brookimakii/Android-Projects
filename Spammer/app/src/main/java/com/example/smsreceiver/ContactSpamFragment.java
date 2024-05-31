@@ -40,7 +40,7 @@ public class ContactSpamFragment extends Fragment {
     spamButton = view.findViewById(R.id.button_spam);
     automatedResponseCheckBox = view.findViewById(R.id.checkbox_automated_response);
     
-    // Populate the spinner with dummy data (replace with your actual contact list)
+    // Populate the spinner with contacts
     ArrayAdapter<String> adapter =
         new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item,
             viewModel.getContacts().stream()
@@ -51,7 +51,6 @@ public class ContactSpamFragment extends Fragment {
     
     spamButton.setOnClickListener(v -> {
       // Start the service for spamming contacts
-      // Pass the selected contact and other necessary data to the service
       startSpamService();
     });
     
@@ -71,10 +70,8 @@ public class ContactSpamFragment extends Fragment {
   private void startSpamService() {
     // Get the selected contact from the spinner
     String selectedContact = contactSpinner.getSelectedItem().toString();
-    
-    // Create an Intent to start the SpamContactService
     Intent serviceIntent = new Intent(getActivity(), SpamContactService.class);
-    // Pass the selected contact and any other necessary data to the service using extras
+    
     serviceIntent.putExtra("selectedContact", selectedContact);
     serviceIntent.putExtra("message", viewModel.getSpamMessage());    // Start the service
     getActivity().startService(serviceIntent);

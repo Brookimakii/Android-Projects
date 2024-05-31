@@ -29,6 +29,7 @@ public class SpamContactService extends Service {
     return START_NOT_STICKY;
   }
   
+  // Spam the contact
   private void spamContact(String contact, String message) {
     Log.d("PrebuiltMessages","Trying to send a '" + message +"' to " + contact + ".");
     try {

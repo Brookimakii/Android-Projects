@@ -33,14 +33,12 @@ public class MainActivity extends AppCompatActivity {
       Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS
   };
   
-  private void startApp() {
-  
-  }
-  
+  // Check if the permissions are granted.
   private boolean isPermissionGranted() {
     
     for (String perm : permissions) {
       if (ContextCompat.checkSelfPermission(this, perm) != PackageManager.PERMISSION_GRANTED) {
+        // If a permission isn't granted return false.
         return false;
       }
     }
@@ -61,9 +59,11 @@ public class MainActivity extends AppCompatActivity {
     if (!isPermissionGranted()) {
       requestPermissions();
     }
+    // Creating the View
     ViewPager2 viewPager = findViewById(R.id.viewPager);
     TabLayout tabLayout = findViewById(R.id.tabLayout);
     
+    // Set the Adapter that control the fragments
     viewPager.setAdapter(new ViewPagerAdapter(this));
     
     new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {

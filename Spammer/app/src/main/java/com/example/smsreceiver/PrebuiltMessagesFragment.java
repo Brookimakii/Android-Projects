@@ -30,17 +30,16 @@ public class PrebuiltMessagesFragment extends Fragment {
   private static final String PREF_MESSAGES = "prebuilt_messages";
   
   private SharedViewModel viewModel;
-  private RecyclerView recyclerView;
   private PrebuiltMessageAdapter messageAdapter;
   private List<PrebuiltMessage> messageList;
   private EditText newMessageEditText;
-  private Button addButton;
   private SharedPreferences sharedPreferences;
   
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
   }
+  
   @Nullable
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -48,9 +47,11 @@ public class PrebuiltMessagesFragment extends Fragment {
     
     sharedPreferences = requireActivity().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     
-    recyclerView = view.findViewById(R.id.recycler_view_prebuilt_messages);
+    // Creating the recycle view for the message.
+    RecyclerView recyclerView = view.findViewById(R.id.recycler_view_prebuilt_messages);
+    
     newMessageEditText = view.findViewById(R.id.edit_text_new_message);
-    addButton = view.findViewById(R.id.button_add_message);
+    Button addButton = view.findViewById(R.id.button_add_message);
     Log.d("PrebuiltMessages", "Attempt loading Message");
     messageList = loadMessages();
     // Initialize messageList with prebuilt messages
@@ -64,6 +65,7 @@ public class PrebuiltMessagesFragment extends Fragment {
     return view;
   }
   
+  // Add a message
   private void addMessage() {
     String newMessage = newMessageEditText.getText().toString().trim();
     if (!newMessage.isEmpty()) {
@@ -74,10 +76,13 @@ public class PrebuiltMessagesFragment extends Fragment {
       newMessageEditText.setText("");
     }
   }
+  
+  // Save Messages to Keep
   private void saveMessages(List<PrebuiltMessage> messages) {
     SharedPreferences.Editor editor = sharedPreferences.edit();
     ObjectMapper mapper = new ObjectMapper();
     try {
+      // Convert the object to json
       String json = mapper.writeValueAsString(messages);
       editor.putString(PREF_MESSAGES, json);
       editor.apply();
@@ -86,12 +91,14 @@ public class PrebuiltMessagesFragment extends Fragment {
       e.printStackTrace();
     }
   }
+  // Load previous message at the loading of the page.
   private List<PrebuiltMessage> loadMessages() {
     String json = sharedPreferences.getString(PREF_MESSAGES, null);
     List<PrebuiltMessage> messages = new ArrayList<>();
     if (json != null) {
       ObjectMapper mapper = new ObjectMapper();
       try {
+        // Convert JSON to object
         messages = mapper.readValue(json, new TypeReference<List<PrebuiltMessage>>() {});
         Log.d("PrebuiltMessages", "Messages loaded successfully: " + json);
       } catch (JsonProcessingException e) {
@@ -102,6 +109,7 @@ public class PrebuiltMessagesFragment extends Fragment {
   }
   
   
+  // Method to uncheck other "Spam" checkboxes except last checked one
   private void uncheckOtherSpamCheckboxes(int currentPosition) {
     for (int i = 0; i < messageList.size(); i++) {
       if (i != currentPosition && messageList.get(i).isSpam()) {
@@ -110,7 +118,7 @@ public class PrebuiltMessagesFragment extends Fragment {
     }
   }
   
-  // Method to uncheck other "Automated Response" checkboxes except the one at the given position
+  // Method to uncheck other "Automated Response" checkboxes except last checked one
   private void uncheckOtherAutomatedResponseCheckboxes(int currentPosition) {
     for (int i = 0; i < messageList.size(); i++) {
       if (i != currentPosition && messageList.get(i).isAutomatedResponse()) {
@@ -119,9 +127,10 @@ public class PrebuiltMessagesFragment extends Fragment {
     }
   }
   
+  
   public static class PrebuiltMessageAdapter extends RecyclerView.Adapter<PrebuiltMessageAdapter.MessageViewHolder> {
     private final List<PrebuiltMessage> messageList;
-    private PrebuiltMessagesFragment fragment;
+    private final PrebuiltMessagesFragment fragment;
     
     public PrebuiltMessageAdapter(List<PrebuiltMessage> messageList, PrebuiltMessagesFragment fragment) {
       this.messageList = messageList;
@@ -150,12 +159,13 @@ public class PrebuiltMessagesFragment extends Fragment {
         fragment.viewModel.setAutoMessage(message.getMessage());
       }
       
+      // Setup delete button
       holder.deleteButton.setOnClickListener(v -> {
         // Show confirmation dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(holder.itemView.getContext());
         builder.setMessage("Are you sure you want to delete this message?")
             .setPositiveButton("Yes", (dialog, which) -> {
-              // Delete the message
+              // Delete the message and if it was check remove the message from the viewModel
               if (holder.spamCheckBox.isChecked()){
                 fragment.viewModel.setSpamMessage(null);
               }
@@ -170,6 +180,7 @@ public class PrebuiltMessagesFragment extends Fragment {
             .show();
       });
       
+      // Spam Check box
       holder.spamCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
         if (isChecked) {
           holder.automatedResponseCheckBox.setChecked(false);
@@ -183,6 +194,7 @@ public class PrebuiltMessagesFragment extends Fragment {
         }
       });
       
+      // Automated Response box
       holder.automatedResponseCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
         if (isChecked) {
           holder.spamCheckBox.setChecked(false);
