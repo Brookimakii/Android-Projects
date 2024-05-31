@@ -9,7 +9,7 @@ export default function Home({navigation}) {
 	const [tracks, setTracks] = useState()
 	const [favorite, setFavorite] = useState([])
 
-
+	// Update favorites
 	const toggleFavorite = (item) => {
 		console.log("-------------------")
 		console.log(favorite.length)
@@ -27,6 +27,7 @@ export default function Home({navigation}) {
 		setFavorite(favList)
 	}
 
+	// Check for update in the search bar.
 	useEffect(() => {
 		const doQueryToItunes = async () => {
 			console.log(query)
@@ -58,6 +59,7 @@ export default function Home({navigation}) {
 					updateFav(favList)
 				}
 			})}/>
+			{/*Result List*/}
 			<FlatList data={tracks} keyExtractor={item => item.trackId}
 								numColumns={1}
 								style={{width: "95%" }}
@@ -73,6 +75,7 @@ export default function Home({navigation}) {
 						<Text style={styles.listItem.data.title}>Album:</Text>
 						<Text style={styles.listItem.data.value}>{item.collectionName}</Text>
 					</View>
+					{/*Fav Button*/}
 					<Button color={favorite.includes(item) ? "red" : "blue"}
 									title={favorite.includes(item) ? "remove to Fav" : "add to Fav"}
 									onPress={() => toggleFavorite(item)}/>

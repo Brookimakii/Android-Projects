@@ -6,6 +6,7 @@ export default function Details({route, navigation}) {
 	const {track} = route.params
 	const dateformat = require('dateformat');
 	return (
+		// Music Details
 		<View style={styles.container}>
 			<Image style={styles.listItem.image} source={{uri: track.artworkUrl100}}/>
 			<Text>{track.trackName}</Text>

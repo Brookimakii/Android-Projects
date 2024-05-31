@@ -11,7 +11,7 @@ export default function Playlist({route, navigation}) {
 		setFavorite(favorite.filter(fav => fav !== item))
 		route.params.cb(favorite.filter(fav => fav !== item))
 	}
-
+	// Fav List
 	return (
 		<View style={styles.container}>
 			{favorite.length === 0 ?
