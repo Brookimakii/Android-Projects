@@ -9,7 +9,7 @@ import Playlist from "./components/Playlist"
 export default function App() {
   const Stack = createNativeStackNavigator()
 
-
+  // Create the navigation
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
